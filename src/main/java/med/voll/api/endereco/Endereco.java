@@ -20,6 +20,7 @@ public class Endereco {
     private String cidade;
     private String uf;
 
+    //Constructor do Medico
     public Endereco(DadosEndereco dados) {
         this.logradouro = dados.logradouro();
         this.bairro = dados.bairro();
@@ -29,4 +30,16 @@ public class Endereco {
         this.cidade = dados.cidade();
         this.uf = dados.uf();
     }
+
+    //Constructor do Paciente
+    public Endereco(med.voll.api.paciente.DadosEndereco dados) {
+        this.logradouro = dados.logradouro();
+        this.bairro = dados.bairro();
+        this.cep = dados.cep();
+        this.numero = dados.numero();
+        this.complemento = dados.complemento();
+        this.cidade = dados.cidade();
+        this.uf = dados.uf();
+    }
+
 }
