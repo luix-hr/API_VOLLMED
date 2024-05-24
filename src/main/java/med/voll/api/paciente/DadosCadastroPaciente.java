@@ -15,7 +15,7 @@ public record DadosCadastroPaciente(
         @NotBlank @Email
         String email,
 
-        @NotBlank @Pattern(regexp = "\\d{20}")
+        @NotBlank
         String telefone,
 
         @NotBlank @Pattern(regexp = "\\d{3}\\.?\\d{3}\\.?\\d{3}\\-?\\d{2}")
