@@ -1,10 +1,10 @@
-package med.voll.api.endereco;
+package med.voll.api.domain.endereco;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import med.voll.api.medico.DadosEndereco;
+import med.voll.api.domain.medico.DadosEndereco;
 
 @Embeddable
 @Getter
@@ -32,7 +32,7 @@ public class Endereco {
     }
 
     //Constructor do Paciente
-    public Endereco(med.voll.api.paciente.DadosEndereco dados) {
+    public Endereco(med.voll.api.domain.paciente.DadosEndereco dados) {
         this.logradouro = dados.logradouro();
         this.bairro = dados.bairro();
         this.cep = dados.cep();
@@ -66,7 +66,7 @@ public class Endereco {
         }
     }
 
-    public void atualizarInformacoes(med.voll.api.paciente.DadosEndereco dados) {
+    public void atualizarInformacoes(med.voll.api.domain.paciente.DadosEndereco dados) {
         if (dados.logradouro() != null){
             this.logradouro = dados.logradouro();
         }
