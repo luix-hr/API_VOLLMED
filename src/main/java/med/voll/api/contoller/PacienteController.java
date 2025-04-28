@@ -1,12 +1,15 @@
 package med.voll.api.contoller;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.domain.paciente.DadosListagemPaciente;
-import med.voll.api.domain.paciente.Paciente;
-import med.voll.api.domain.paciente.PacienteRepository;
-import med.voll.api.domain.paciente.*;
+import med.voll.api.entities.paciente.dto.DadosAtualizacaoPaciente;
+import med.voll.api.entities.paciente.dto.DadosCadastroPaciente;
+import med.voll.api.entities.paciente.dto.DadosDetalhamentoPaciente;
+import med.voll.api.entities.paciente.dto.DadosListagemPaciente;
+import med.voll.api.entities.paciente.Paciente;
+import med.voll.api.repositories.paciente.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/pacientes")
+@SecurityRequirement(name = "bearer-key")
 public class PacienteController {
 
     @Autowired
@@ -34,7 +38,7 @@ public class PacienteController {
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemPaciente>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao){
-        var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemPaciente::new);
+        var page = repository.findByStatusTrue(paginacao).map(DadosListagemPaciente::new);
 
         return ResponseEntity.ok(page);
     }
@@ -52,7 +56,7 @@ public class PacienteController {
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id){
         var paciente = repository.getReferenceById(id);
-        paciente.excluir();
+        paciente.inativar();
 
         return ResponseEntity.noContent().build();
     }

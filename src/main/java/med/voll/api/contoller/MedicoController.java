@@ -1,12 +1,15 @@
 package med.voll.api.contoller;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.domain.medico.DadosListagemMedico;
-import med.voll.api.domain.medico.Medico;
-import med.voll.api.domain.medico.MedicoRepository;
-import med.voll.api.domain.medico.*;
+import med.voll.api.entities.medico.dto.DadosAtualizacaoMedico;
+import med.voll.api.entities.medico.dto.DadosCadastroMedico;
+import med.voll.api.entities.medico.dto.DadosDetalhamentoMedico;
+import med.voll.api.entities.medico.dto.DadosListagemMedico;
+import med.voll.api.entities.medico.Medico;
+import med.voll.api.repositories.medico.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/medicos")
+@SecurityRequirement(name = "bearer-key")
 public class MedicoController {
 
     @Autowired
@@ -35,7 +39,7 @@ public class MedicoController {
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemMedico>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao){
-        var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
+        var page = repository.findByStatusTrue(paginacao).map(DadosListagemMedico::new);
 
         return ResponseEntity.ok(page);
     }
@@ -53,7 +57,7 @@ public class MedicoController {
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id){
         var medico = repository.getReferenceById(id);
-        medico.excluir();
+        medico.inativar();
 
         return ResponseEntity.noContent().build();
     }
